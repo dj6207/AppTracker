@@ -1,0 +1,8 @@
+/TrackerUI
+/.vs
+*/.vs
+*.config
+*/bin
+*/obj
+*.sln
+*.csproj
