@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace TrackerLibrary.Models
 {
+    // Might not need this class
     public class TrackerModel
     {
         /// <summary>

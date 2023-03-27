@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using TrackerLibrary.Models;
 
 namespace TrackerLibrary.DataAccess
@@ -65,9 +66,20 @@ namespace TrackerLibrary.DataAccess
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString(db)))
             {
-                // Need to be tested 
                 connection.Execute("spApplication_Delete");
             }
+        }
+
+        public List<ApplicationDataModel> GetApplicationData_ByType(string type)
+        {
+            List<ApplicationDataModel> output;
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString(db)))
+            {
+                var m = new DynamicParameters();
+                m.Add("@ApplicationType", type);
+                output = connection.Query<ApplicationDataModel>("spApplication_GetByApplicationType", m, commandType: CommandType.StoredProcedure).ToList();
+            }
+            return output;
         }
     }
 }
