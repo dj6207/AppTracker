@@ -15,7 +15,7 @@ namespace TrackerLibrary.DataAccess
     {
         private const string db = "Applications";
 
-        public ApplicationDataModel CreateApplicationData(ApplicationDataModel model)
+        public void CreateApplicationData(ApplicationDataModel model)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString(db)))
             {
@@ -25,8 +25,8 @@ namespace TrackerLibrary.DataAccess
                 a.Add("@TimeSpent", model.TimeSpent);
                 a.Add("@id", 0, dbType: DbType.Int32, direction: ParameterDirection.Output);
                 connection.Execute("dbo.spApplicationData_Insert", a, commandType: CommandType.StoredProcedure);
-                model.Id = a.Get<int>("@id");
-                return model;
+                //model.Id = a.Get<int>("@id");
+                //return model;
             }
         }
 
@@ -80,6 +80,12 @@ namespace TrackerLibrary.DataAccess
                 output = connection.Query<ApplicationDataModel>("spApplication_GetByApplicationType", m, commandType: CommandType.StoredProcedure).ToList();
             }
             return output;
+        }
+
+        public void UpdateApplicationData_LastUsed(ApplicationDataModel model)
+        {
+            // TODO: ADD a last used column in sql database to see when that application was last used
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TrackerLibrary.Models
+﻿namespace TrackerLibrary.Models
 {
     public class ApplicationDataModel
     {
@@ -25,5 +19,9 @@ namespace TrackerLibrary.Models
         /// Current Time Spent on Application
         /// </summary>
         public int TimeSpent { get; set; }
+        /// <summary>
+        /// Last Used Date
+        /// </summary>
+        public string LastUsed { get; set; }
     }
 }

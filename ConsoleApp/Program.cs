@@ -6,6 +6,7 @@ internal static class Program
 {
     static void Main()
     {
+
         Boolean Debug = true;
         if (Debug)
         {
@@ -20,10 +21,10 @@ internal static class Program
             switch (Console.ReadLine().ToLower())
             {
                 case "d":
-                    GlobalConfig.Connection.ClearApplicationDataBase();
+                    GlobalConfig.SqliteConnection.ClearApplicationDataBase();
                     break;
                 case "p":
-                    List<ApplicationDataModel> l = GlobalConfig.Connection.GetApplicationData_All();
+                    List<ApplicationDataModel> l = GlobalConfig.SqliteConnection.GetApplicationData_All();
                     foreach (ApplicationDataModel model in l)
                     {
                         Console.WriteLine(model.ApplicationName);
@@ -34,7 +35,8 @@ internal static class Program
                     a.ApplicationName = "TestName";
                     a.ApplicationType = "TestType";
                     a.TimeSpent = 0;
-                    GlobalConfig.Connection.CreateApplicationData(a);
+                    a.LastUsed = DateTime.Now.ToString();
+                    GlobalConfig.SqliteConnection.CreateApplicationData(a);
                     break;
                 case "g":
                     GenerateStatistics.GenerateAllStatistics();
@@ -42,7 +44,7 @@ internal static class Program
                     break;
                 case "t":
                     Console.WriteLine("Type:");
-                    List<ApplicationDataModel> t = GlobalConfig.Connection.GetApplicationData_ByType(Console.ReadLine());
+                    List<ApplicationDataModel> t = GlobalConfig.SqliteConnection.GetApplicationData_ByType(Console.ReadLine());
                     foreach (ApplicationDataModel model in t)
                     {
                         Console.WriteLine();
@@ -53,7 +55,7 @@ internal static class Program
                     break;
                 case "n":
                     Console.WriteLine("Name:");
-                    List<ApplicationDataModel> n = GlobalConfig.Connection.GetApplicationData_ByName(Console.ReadLine());
+                    List<ApplicationDataModel> n = GlobalConfig.SqliteConnection.GetApplicationData_ByName(Console.ReadLine());
                     foreach (ApplicationDataModel model in n)
                     {
                         Console.WriteLine();
@@ -78,12 +80,14 @@ internal static class Program
                 Console.WriteLine(foregroundWindowName);
 
                 // Get application data
-                List<ApplicationDataModel> ln = GlobalConfig.Connection.GetApplicationData_ByName(ApplicationTracker.GetWindowTitle(foregroundWindowHandle));
+                List<ApplicationDataModel> ln = GlobalConfig.SqliteConnection.GetApplicationData_ByName(ApplicationTracker.GetWindowTitle(foregroundWindowHandle));
                 if (ln.Any())
                 {
                     Console.WriteLine(ln.First().TimeSpent);
                     ln.First().TimeSpent++;
-                    GlobalConfig.Connection.UpdateApplicationData_Time(ln.First());
+                    ln.First().LastUsed = DateTime.Now.ToString();
+                    GlobalConfig.SqliteConnection.UpdateApplicationData_Time(ln.First());
+                    GlobalConfig.SqliteConnection.UpdateApplicationData_LastUsed(ln.First());
                 }
                 else
                 {
@@ -91,7 +95,7 @@ internal static class Program
                     m.ApplicationType = foregroundWindowName;
                     m.ApplicationName = ApplicationTracker.GetWindowTitle(foregroundWindowHandle);
                     m.TimeSpent = 0;
-                    GlobalConfig.Connection.CreateApplicationData(m);
+                    GlobalConfig.SqliteConnection.CreateApplicationData(m);
                 }
                 Thread.Sleep(1000);
             }

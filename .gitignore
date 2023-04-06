@@ -1,8 +1,13 @@
 /.vs
 /TrackerUI
-*/.vs
+
+
 *.config
-*/bin
-*/obj
 *.sln
 *.csproj
+*.user
+
+*/.vs
+*/bin
+*/obj
+*/Database
